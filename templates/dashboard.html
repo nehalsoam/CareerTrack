@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <h1>Job Application Dashboard</h1>
+
+        <p class="subtitle">
+            Track your job search progress at a glance.
+        </p>
+
+        <div class="dashboard">
+
+            <div class="card">
+                <h2>Total Applications</h2>
+                <p>{{ total }}</p>
+            </div>
+
+            <div class="card">
+                <h2>Applied</h2>
+                <p>{{ applied }}</p>
+            </div>
+
+            <div class="card">
+                <h2>Shortlisted</h2>
+                <p>{{ shortlisted }}</p>
+            </div>
+
+            <div class="card">
+                <h2>Interview</h2>
+                <p>{{ interview }}</p>
+            </div>
+
+            <div class="card">
+                <h2>Rejected</h2>
+                <p>{{ rejected }}</p>
+            </div>
+
+            <div class="card">
+                <h2>Selected</h2>
+                <p>{{ selected }}</p>
+            </div>
+
+        </div>
+
+        <div class="dashboard-buttons">
+
+            <a href="/add">Add Application</a>
+
+            <a href="/applications">View Applications</a>
+
+            <a href="/">Home</a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

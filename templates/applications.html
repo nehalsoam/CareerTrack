@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>My Applications</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+    <h1>My Job Applications</h1>
+
+    <p class="subtitle">
+        Search, track and manage all your job applications.
+    </p>
+
+
+    <!-- =========================
+         SEARCH AND FILTER
+    ========================== -->
+
+    <div class="search-container">
+
+        <form action="/applications" method="GET">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search company or role"
+                value="{{ search }}"
+            >
+
+
+            <select name="status">
+
+                <option value="">
+                    All Status
+                </option>
+
+
+                <option value="Applied"
+                    {% if status == "Applied" %}selected{% endif %}>
+                    Applied
+                </option>
+
+
+                <option value="Shortlisted"
+                    {% if status == "Shortlisted" %}selected{% endif %}>
+                    Shortlisted
+                </option>
+
+
+                <option value="Interview"
+                    {% if status == "Interview" %}selected{% endif %}>
+                    Interview
+                </option>
+
+
+                <option value="Rejected"
+                    {% if status == "Rejected" %}selected{% endif %}>
+                    Rejected
+                </option>
+
+
+                <option value="Selected"
+                    {% if status == "Selected" %}selected{% endif %}>
+                    Selected
+                </option>
+
+            </select>
+
+
+            <button type="submit">
+                Search
+            </button>
+
+        </form>
+
+    </div>
+
+
+
+    <!-- =========================
+         APPLICATION COUNT
+    ========================== -->
+
+    <p class="application-count">
+
+        {% if total_applications > 0 %}
+
+            Showing
+            {{ start_number }}
+            -
+            {{ end_number }}
+            of
+            {{ total_applications }}
+            applications
+
+        {% else %}
+
+            No applications found.
+
+        {% endif %}
+
+    </p>
+
+
+
+    <!-- =========================
+         APPLICATION TABLE
+    ========================== -->
+
+    <table>
+
+        <tr>
+
+            <th>No.</th>
+
+            <th>Company</th>
+
+            <th>Role</th>
+
+            <th>Location</th>
+
+            <th>Status</th>
+
+            <th>Applied Date</th>
+
+            <th>Action</th>
+
+        </tr>
+
+
+        {% for application in applications %}
+
+        <tr>
+
+
+            <!-- DISPLAY NUMBER -->
+
+            <td>
+
+                {{ (page - 1) * 10 + loop.index }}
+
+            </td>
+
+
+            <!-- COMPANY -->
+
+            <td>
+
+                {{ application[1] }}
+
+            </td>
+
+
+            <!-- ROLE -->
+
+            <td>
+
+                {{ application[2] }}
+
+            </td>
+
+
+            <!-- LOCATION -->
+
+            <td>
+
+                {{ application[3] }}
+
+            </td>
+
+
+            <!-- STATUS -->
+
+            <td>
+
+                {% if application[4] == "Applied" %}
+
+                    <span class="status-applied">
+                        Applied
+                    </span>
+
+
+                {% elif application[4] == "Shortlisted" %}
+
+                    <span class="status-shortlisted">
+                        Shortlisted
+                    </span>
+
+
+                {% elif application[4] == "Interview" %}
+
+                    <span class="status-interview">
+                        Interview
+                    </span>
+
+
+                {% elif application[4] == "Selected" %}
+
+                    <span class="status-selected">
+                        Selected
+                    </span>
+
+
+                {% elif application[4] == "Rejected" %}
+
+                    <span class="status-rejected">
+                        Rejected
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+
+            <!-- APPLIED DATE -->
+
+            <td>
+
+                {{ application[5] }}
+
+            </td>
+
+
+            <!-- ACTION -->
+
+            <td>
+
+                <a href="/edit/{{ application[0] }}">
+                    Edit
+                </a>
+
+
+                <a
+                    href="/delete/{{ application[0] }}"
+                    onclick="return confirm('Are you sure you want to delete this application?')"
+                >
+                    Delete
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+
+
+    <!-- =========================
+         PAGINATION
+    ========================== -->
+
+    {% if total_pages > 1 %}
+
+    <div class="pagination">
+
+
+        <!-- PREVIOUS -->
+
+        {% if page > 1 %}
+
+            <a
+                href="/applications?page={{ page - 1 }}&search={{ search }}&status={{ status }}"
+            >
+                Previous
+            </a>
+
+        {% endif %}
+
+
+
+        <!-- PAGE NUMBERS -->
+
+        {% for page_number in range(1, total_pages + 1) %}
+
+
+            {% if page_number == page %}
+
+                <span class="current-page">
+
+                    {{ page_number }}
+
+                </span>
+
+
+            {% else %}
+
+                <a
+                    href="/applications?page={{ page_number }}&search={{ search }}&status={{ status }}"
+                >
+
+                    {{ page_number }}
+
+                </a>
+
+            {% endif %}
+
+
+        {% endfor %}
+
+
+
+        <!-- NEXT -->
+
+        {% if page < total_pages %}
+
+            <a
+                href="/applications?page={{ page + 1 }}&search={{ search }}&status={{ status }}"
+            >
+                Next
+            </a>
+
+        {% endif %}
+
+
+    </div>
+
+    {% endif %}
+
+
+
+    <!-- =========================
+         NAVIGATION BUTTONS
+    ========================== -->
+
+    <div class="dashboard-buttons">
+
+
+        <a href="/add">
+
+            Add Application
+
+        </a>
+
+
+        <a href="/dashboard">
+
+            Dashboard
+
+        </a>
+
+
+        <a href="/">
+
+            Home
+
+        </a>
+
+
+    </div>
+
+
+</body>
+
+</html>
